@@ -1,8 +1,9 @@
 ## OctoPiPanel v0.1 ##
 
-OctoPiPanel creates a simple interface on a small screen to control OctoPrint.
-OctoPiPanel requires Pygame to be installed. Pygame can be downloaded from http://pygame.org.
-OctoPiPanel is developed by Jonas Lorander (jonas@haksberg.net).
+OctoPiPanel creates a simple interface on a small screen to control OctoPrint. <br/>
+OctoPiPanel requires Pygame to be installed. Pygame can be downloaded from http://pygame.org. <br/>
+OctoPiPanel is developed by Jonas Lorander (jonas@haksberg.net).<br/>
+
 https://github.com/jonaslorander/OctoPiPanel
 
 This is a (slow) work in progress.
@@ -32,8 +33,8 @@ Put the URL to you OctoPrint installation in the **baseurl**-property in the **O
 Put your API-key in the **apikey**-property in the **OctoPiPanel.cfg** file.
 
 ### Running OctoPiPanel ###
-start OctoPiPanel by browsing to the folder of the Python-file and execute
-`sudo python ./OctoPiPanel.py`
+start OctoPiPanel by browsing to the folder of the Python-file and execute <br/>
+`sudo python ./OctoPiPanel.py` <br/>
 Yes, `sudo` must be used for the time being.
 
 ## Attributions ##
