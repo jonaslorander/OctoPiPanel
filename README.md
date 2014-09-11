@@ -32,8 +32,9 @@ Put the URL to you OctoPrint installation in the **baseurl**-property in the **O
 Put your API-key in the **apikey**-property in the **OctoPiPanel.cfg** file.
 
 ### Running OctoPiPanel ###
-start OctoPiPanel by browsing to the folder of the Python-file and execute `sudo python ./OctoPiPanel.py`
-
+start OctoPiPanel by browsing to the folder of the Python-file and execute
+`sudo python ./OctoPiPanel.py`
 Yes, `sudo` must be used for the time being.
 
+## Attributions ##
 PygButton courtesy of Al Sweigart (al@inventwithpython.com)
