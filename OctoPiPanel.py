@@ -61,7 +61,9 @@ class OctoPiPanel():
     """
     
     cfg = RawConfigParser()
-    cfg.read(r'OctoPiPanel.cfg')
+    scriptDirectory = os.path.dirname(os.path.realpath(__file__))
+    settingsFilePath = os.path.join(scriptDirectory, "OctoPiPanel.cfg")
+    cfg.readfp(open(settingsFilePath,"r"))
 
     api_baseurl = cfg.get('settings', 'baseurl')
     apikey = cfg.get('settings', 'apikey')
@@ -140,9 +142,9 @@ class OctoPiPanel():
 
         # Set font
         #self.fntText = pygame.font.Font("Cyberbit.ttf", 12)
-        self.fntText = pygame.font.Font("Cyberbit.ttf", 12)
+        self.fntText = pygame.font.Font(os.path.join(self.scriptDirectory, "Cyberbit.ttf"), 12)
         self.fntText.set_bold(True)
-        self.fntTextSmall = pygame.font.Font("Cyberbit.ttf", 10)
+        self.fntTextSmall = pygame.font.Font(os.path.join(self.scriptDirectory, "Cyberbit.ttf"), 10)
         self.fntTextSmall.set_bold(True)
 
         # backlight on off status and control
