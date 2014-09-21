@@ -42,7 +42,7 @@ sudo pip install -r requirements.txt
 ```
 
 ### Settings ###
-* You need to activate the REST API in you OctoPrint settings and get your API-key.
+* You need to activate the REST API in you OctoPrint settings and get your API-key with Octoprint Versions older then 1.1.x, otherwise you will be fine.
 * Put the URL to you OctoPrint installation in the **baseurl**-property in the **OctoPiPanel.cfg** file. For instance `http://localhost:5000` or `http://192.168.0.111:5000`.
 * Put your API-key in the **apikey**-property in the **OctoPiPanel.cfg** file.
 
