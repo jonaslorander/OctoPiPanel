@@ -92,3 +92,19 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
+
+# Emacs
+# ==========================
+auto-save-list
+custom.el
+url/
+.org-id-locations
+\#*
+org-mode-config.el
+*~
+.#*
+\#*\#
+*.log
+.DS_Store
+org-clock-save.el
+emacs-config.el
