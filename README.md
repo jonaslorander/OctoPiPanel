@@ -36,8 +36,8 @@ The setup is pretty basic. You'll be needing Python 2.7 which should be installe
 ```
 cd ~
 sudo apt-get install python-pip git
-git clone https://github.com/jonaslorander/OctoPiPrint.git
-cd OctoPiPrint
+git clone https://github.com/jonaslorander/OctoPiPanel.git
+cd OctoPiPanel
 sudo pip install -r requirements.txt
 ```
 
