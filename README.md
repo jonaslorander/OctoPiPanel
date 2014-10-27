@@ -42,7 +42,7 @@ sudo pip install -r requirements.txt
 ```
 
 ### Settings ###
-* You need to activate the REST API in you OctoPrint settings and get your API-key with Octoprint Versions older then 1.1.x, otherwise you will be fine.
+* You need to activate the REST API in you OctoPrint settings and get your API-key with Octoprint Versions older then 1.1.1, otherwise you will be fine.
 * Put the URL to you OctoPrint installation in the **baseurl**-property in the **OctoPiPanel.cfg** file. For instance `http://localhost:5000` or `http://192.168.0.111:5000`.
 * Put your API-key in the **apikey**-property in the **OctoPiPanel.cfg** file.
 
@@ -50,6 +50,21 @@ sudo pip install -r requirements.txt
 Start OctoPiPanel by browsing to the folder of the Python-file and execute <br/>
 `sudo python ./OctoPiPanel.py &` <br/>
 In a screen session (auto start scripts will be coming later). Yes, `sudo` must be used for the time being.
+
+### Automatic start up ###
+
+Make OctoPiPanel-py executable and then copy the script files to their respective folders and make the init script executable:
+```
+chmod +x OctoPiPanel.py
+sudo cp scripts/octopipanel.init /etc/init.d/octopipanel
+sudo chmod +x /etc/init.d/octopipanel
+sudo cp scripts/octopipanel.default /etc/default/octopipanel
+```
+Then add the script to autostart using `sudo update-rc.d octopipanel defaults`.
+
+This will also allow you to start/stop/restart the OctoPiPanel daemon via
+
+sudo service octopipanel {start|stop|restart}
 
 ## Attributions ##
 PygButton courtesy of Al Sweigart (al@inventwithpython.com)
