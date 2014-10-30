@@ -129,7 +129,7 @@ class OctoPiPanel():
 
         # init pygame and set up screen
         pygame.init()
-        if platform.system() == 'Windows':
+        if platform.system() == 'Windows' or platform.system() == 'Darwin':
             pygame.mouse.set_visible(True)
         else:
             pygame.mouse.set_visible(False)
