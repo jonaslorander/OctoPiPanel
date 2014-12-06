@@ -45,6 +45,8 @@ sudo pip install -r requirements.txt
 * You need to activate the REST API in you OctoPrint settings and get your API-key with Octoprint Versions older then 1.1.1, otherwise you will be fine.
 * Put the URL to you OctoPrint installation in the **baseurl**-property in the **OctoPiPanel.cfg** file. For instance `http://localhost:5000` or `http://192.168.0.111:5000`.
 * Put your API-key in the **apikey**-property in the **OctoPiPanel.cfg** file.
+* By default the background light och the displays turns off after 30 seconds (30 000 ms). This can be changed by editing the **backlightifftime**-property in the configuration file. Settings this value to 0 keeps the display from turning off the background light.
+* If you have a display with a different resolution you can change the size of OctoPiPanel windows using **window_width**- and **window_height**-properties in the configuration file.
 
 ### Running OctoPiPanel ###
 Start OctoPiPanel by browsing to the folder of the Python-file and execute <br/>

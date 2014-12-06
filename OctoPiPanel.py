@@ -71,6 +71,16 @@ class OctoPiPanel():
     updatetime = cfg.getint('settings', 'updatetime')
     backlightofftime = cfg.getint('settings', 'backlightofftime')
 
+    if cfg.has_option('settings', 'window_width'):
+        win_width = cfg.getint('settings', 'window_width')
+    else:
+        win_width = 320
+
+    if cfg.has_option('settings', 'window_height'):
+        win_height = cfg.getint('settings', 'window_height')
+    else:
+        win_height = 240
+
     addkey = '?apikey={0}'.format(apikey)
     apiurl_printhead = '{0}/api/printer/printhead'.format(api_baseurl)
     apiurl_tool = '{0}/api/printer/tool'.format(api_baseurl)
@@ -86,7 +96,7 @@ class OctoPiPanel():
     graph_area_width  = 285 #308
     graph_area_height = 110
 
-    def __init__(self, width=320, height=240, caption="OctoPiPanel"):
+    def __init__(self, caption="OctoPiPanel"):
         """
         .
         """
@@ -134,8 +144,7 @@ class OctoPiPanel():
         else:
             pygame.mouse.set_visible(False)
 
-        self.width, self.height = width, height
-        self.screen = pygame.display.set_mode( (width,height) )
+        self.screen = pygame.display.set_mode( (self.win_width, self.win_height) )
 	#modes = pygame.display.list_modes(16)
 	#self.screen = pygame.display.set_mode(modes[0], FULLSCREEN, 16)
         pygame.display.set_caption( caption )
@@ -195,11 +204,12 @@ class OctoPiPanel():
                 self.getstate_ticks = pygame.time.get_ticks()
 
             # Is it time to turn of the backlight?
-            if pygame.time.get_ticks() - self.bglight_ticks > self.backlightofftime and platform.system() == 'Linux':
-                # disable the backlight
-                os.system("echo '0' > /sys/class/gpio/gpio252/value")
-                self.bglight_ticks = pygame.time.get_ticks()
-                self.bglight_on = False
+            if self.backlightofftime > 0 and platform.system() == 'Linux':
+                if pygame.time.get_ticks() - self.bglight_ticks > self.backlightofftime:
+                    # disable the backlight
+                    os.system("echo '0' > /sys/class/gpio/gpio252/value")
+                    self.bglight_ticks = pygame.time.get_ticks()
+                    self.bglight_on = False
             
             # Update buttons visibility, text, graphs etc
             self.update()
@@ -592,5 +602,5 @@ class OctoPiPanel():
 
 
 if __name__ == '__main__':
-    opp = OctoPiPanel(320, 240, "OctoPiPanel!")
+    opp = OctoPiPanel("OctoPiPanel!")
     opp.Start()
