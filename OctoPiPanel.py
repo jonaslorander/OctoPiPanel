@@ -1,44 +1,5 @@
 #!/usr/bin/env python
 
-"""
-OctoPiPanel v0.1
-
-OctoPiPanel creates a simple interface on a small screen to control OctoPrint
-OctoPiPanel requires Pygame to be installed. Pygame can be downloaded from http://pygame.org
-OctoPiPanel is developed by Jonas Lorander (jonas@haksberg.net)
-https://github.com/jonaslorander/OctoPiPanel
-
-
-Simplified BSD-2 License:
-
-Copyright 2014 Jonas Lorander.
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are
-permitted provided that the following conditions are met:
-
-   1. Redistributions of source code must retain the above copyright notice, this list of
-      conditions and the following disclaimer.
-
-   2. Redistributions in binary form must reproduce the above copyright notice, this list
-      of conditions and the following disclaimer in the documentation and/or other materials
-      provided with the distribution.
-
-THIS SOFTWARE IS PROVIDED BY Al Sweigart ''AS IS'' AND ANY EXPRESS OR IMPLIED
-WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
-FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL Al Sweigart OR
-CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
-ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-The views and conclusions contained in the software and documentation are those of the
-authors and should not be interpreted as representing official policies, either expressed
-or implied, of Jonas Lorander.
-"""
-
 __author__ = "Jonas Lorander"
 __license__ = "Simplified BSD 2-Clause License"
 
@@ -306,10 +267,10 @@ class OctoPiPanel():
                 state = json.loads(req.text)
         
                 # Set status flags
-                self.HotEndTemp = state['temps']['tool0']['actual']
-                self.BedTemp = state['temps']['bed']['actual']
-                self.HotEndTempTarget = state['temps']['tool0']['target']
-                self.BedTempTarget = state['temps']['bed']['target']
+                self.HotEndTemp = state['temperature']['tool0']['actual']
+                self.BedTemp = state['temperature']['bed']['actual']
+                self.HotEndTempTarget = state['temperature']['tool0']['target']
+                self.BedTempTarget = state['temperature']['bed']['target']
 
                 if self.HotEndTempTarget == None:
                     self.HotEndTempTarget = 0.0
@@ -384,9 +345,11 @@ class OctoPiPanel():
         else:
             self.btnPausePrint.caption = "Pause"
         
-        # Set abort and pause buttons visibility
+        # Set abort, pause, reboot and shutdown buttons visibility
         self.btnHeatHotEnd.visible = not (self.Printing or self.Paused)
         self.btnHeatBed.visible = not (self.Printing or self.Paused)
+        self.btnReboot.visible = not (self.Printing or self.Paused)
+        self.btnShutdown.visible = not (self.Printing or self.Paused)
 
         # Set texts on heat buttons
         if self.HotHotEnd:
@@ -604,8 +567,6 @@ class OctoPiPanel():
     def _sendAPICommand(self, url, data):
         headers = { 'content-type': 'application/json', 'X-Api-Key': self.apikey }
         r = requests.post(url, data=json.dumps(data), headers=headers)
-        print r.text
-
 
 if __name__ == '__main__':
     opp = OctoPiPanel("OctoPiPanel!")

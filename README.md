@@ -55,8 +55,9 @@ In a screen session (auto start scripts will be coming later). Yes, `sudo` must 
 
 ### Automatic start up ###
 
-Make OctoPiPanel-py executable and then copy the script files to their respective folders and make the init script executable:
+Make OctoPiPanel.py executable and then copy the script files to their respective folders and make the init script executable:
 ```
+cd ~/OctoPiPanel
 chmod +x OctoPiPanel.py
 sudo cp scripts/octopipanel.init /etc/init.d/octopipanel
 sudo chmod +x /etc/init.d/octopipanel
