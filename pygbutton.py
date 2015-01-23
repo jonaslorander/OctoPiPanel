@@ -39,7 +39,7 @@ import pygame
 from pygame.locals import *
 
 pygame.font.init()
-PYGBUTTON_FONT = pygame.font.Font('freesansbold.ttf', 14)
+PYGBUTTON_FONT = pygame.font.Font('freesansbold.ttf', 25)
 
 BLACK     = (  0,   0,   0)
 WHITE     = (255, 255, 255)
