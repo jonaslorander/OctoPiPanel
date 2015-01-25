@@ -11,6 +11,7 @@ import pygbutton
 import requests
 import platform
 import datetime
+import subprocess
 from pygame.locals import *
 from collections import deque
 from ConfigParser import RawConfigParser
@@ -92,11 +93,12 @@ class OctoPiPanel():
         #print self.BedTempList
        
         if platform.system() == 'Linux':
-            # Init framebuffer/touchscreen environment variables
-            os.putenv('SDL_VIDEODRIVER', 'fbcon')
-            os.putenv('SDL_FBDEV'      , '/dev/fb1')
-            os.putenv('SDL_MOUSEDRV'   , 'TSLIB')
-            os.putenv('SDL_MOUSEDEV'   , '/dev/input/touchscreen')
+			if subprocess.Popen(["pidof", "X"], stdout=subprocess.PIPE).communicate()[0].strip() == "" :
+				# Init framebuffer/touchscreen environment variables
+				os.putenv('SDL_VIDEODRIVER', 'fbcon')
+				os.putenv('SDL_FBDEV'      , '/dev/fb1')
+				os.putenv('SDL_MOUSEDRV'   , 'TSLIB')
+				os.putenv('SDL_MOUSEDEV'   , '/dev/input/touchscreen')
 
         # init pygame and set up screen
         pygame.init()
