@@ -21,7 +21,7 @@ All rights reserved.
 ### Requirements ###
 
 * OctoPrint >= version 1.1.0 running on a Raspberry Pi on Raspbian
-* Adafruit PiTFT (http://adafru.it/1601)
+* Adafruit PiTFT (http://adafru.it/1601) (use this script to set it up; https://learn.adafruit.com/adafruit-pitft-28-inch-resistive-touchscreen-display-raspberry-pi/easy-install#diy-installer-script)
 * Python 2.7 (should already be installed)
 * PyGame (should already be installed)
 * requests Python module
