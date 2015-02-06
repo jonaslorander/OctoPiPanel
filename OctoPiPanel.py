@@ -269,10 +269,11 @@ class OctoPiPanel():
                 state = json.loads(req.text)
         
                 # Set status flags
-                self.HotEndTemp = state['temperature']['tool0']['actual']
-                self.BedTemp = state['temperature']['bed']['actual']
-                self.HotEndTempTarget = state['temperature']['tool0']['target']
-                self.BedTempTarget = state['temperature']['bed']['target']
+                tempKey = 'temps' if 'temps' in state else 'temperature'
+                self.HotEndTemp = state[tempKey]['tool0']['actual']
+                self.BedTemp = state[tempKey]['bed']['actual']
+                self.HotEndTempTarget = state[tempKey]['tool0']['target']
+                self.BedTempTarget = state[tempKey]['bed']['target']
 
                 if self.HotEndTempTarget == None:
                     self.HotEndTempTarget = 0.0
