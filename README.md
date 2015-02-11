@@ -1,4 +1,3 @@
-### This is the devel-branch and should only be used with devel-branch of OctoPrint. ###
 ## OctoPiPanel v0.1 ##
 
 OctoPiPanel creates a simple interface on a small screen to control OctoPrint. <br/>
