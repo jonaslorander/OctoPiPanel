@@ -1,4 +1,4 @@
-## OctoPiPanel v0.1 ##
+## OctoPiPanel v0.2-dev ##
 
 OctoPiPanel creates a simple interface on a small screen to control OctoPrint. <br/>
 OctoPiPanel requires Pygame to be installed. Pygame can be downloaded from http://pygame.org. <br/>
@@ -68,6 +68,24 @@ Then add the script to autostart using `sudo update-rc.d octopipanel defaults`.
 This will also allow you to start/stop/restart the OctoPiPanel daemon via
 
 sudo service octopipanel {start|stop|restart}
+
+### Update OctoPiPanel ###
+Stop OctoPiPanel and then issue this command to update:
+```
+cd ~/OctoPiPanel/
+git pull
+sudo pip install -r requirements.txt
+```
+
+If you would like to switch branch to devel, do this:
+```
+cd ~/OctoPiPanel/
+git pull
+git checkout devel
+sudo pip install -r requirements.txt
+```
+
+Then you can start OctoPiPanel again.
 
 ## Attributions ##
 PygButton courtesy of Al Sweigart (al@inventwithpython.com)
