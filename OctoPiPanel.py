@@ -279,9 +279,14 @@ class OctoPiPanel():
                 # Set status flags
                 tempKey = 'temps' if 'temps' in state else 'temperature'
                 self.HotEndTemp = state[tempKey]['tool0']['actual']
-                self.BedTemp = state[tempKey]['bed']['actual']
                 self.HotEndTempTarget = state[tempKey]['tool0']['target']
-                self.BedTempTarget = state[tempKey]['bed']['target']
+
+		if 'bed' in state[tempKey]:
+			self.BedTemp = state[tempKey]['bed']['actual']
+			self.BedTempTarget = state[tempKey]['bed']['target']
+		else:
+			self.BedTemp = -1;
+			self.BedTempTarget = -1;
 
                 if self.HotEndTempTarget == None:
                     self.HotEndTempTarget = 0.0
