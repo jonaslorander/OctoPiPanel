@@ -95,15 +95,15 @@ class OctoPiPanel():
         #print self.BedTempList
 
         if platform.system() == 'Linux':
-			if subprocess.Popen(["pidof", "X"], stdout=subprocess.PIPE).communicate()[0].strip() == "" :
-				# Init framebuffer/touchscreen environment variables
-				os.putenv('SDL_VIDEODRIVER', 'fbcon')
-				os.putenv('SDL_FBDEV'      , '/dev/fb1')
+            if subprocess.Popen(["pidof", "X"], stdout=subprocess.PIPE).communicate()[0].strip() == "" :
+                # Init framebuffer/touchscreen environment variables
+                os.putenv('SDL_VIDEODRIVER', 'fbcon')
+                os.putenv('SDL_FBDEV'      , '/dev/fb1')
                 # If this is not a RoboPeak USB display
                 lsusb = subprocess.Popen('lsusb', stdout=subprocess.PIPE).communicate()[0]
                 if lsusb.find('fccf:a001') == -1 :
-				    os.putenv('SDL_MOUSEDRV'   , 'TSLIB')
-				    os.putenv('SDL_MOUSEDEV'   , '/dev/input/touchscreen')
+                    os.putenv('SDL_MOUSEDRV', 'TSLIB')
+                    os.putenv('SDL_MOUSEDEV', '/dev/input/touchscreen')
 
         # init pygame and set up screen
         pygame.init()
@@ -113,8 +113,8 @@ class OctoPiPanel():
             pygame.mouse.set_visible(False)
 
         self.screen = pygame.display.set_mode( (self.win_width, self.win_height) )
-	#modes = pygame.display.list_modes(16)
-	#self.screen = pygame.display.set_mode(modes[0], FULLSCREEN, 16)
+    #modes = pygame.display.list_modes(16)
+    #self.screen = pygame.display.set_mode(modes[0], FULLSCREEN, 16)
         pygame.display.set_caption( caption )
 
         # Set font
@@ -211,12 +211,12 @@ class OctoPiPanel():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 print "quit"
-		self.done = True
+        self.done = True
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     print "Got escape key"
-		    self.done = True
+            self.done = True
 
                 # Look for specific keys.
                 #  Could be used if a keyboard is connected
@@ -282,16 +282,16 @@ class OctoPiPanel():
                 # Set status flags
                 tempKey = 'temps' if 'temps' in state else 'temperature'
 
-		if 'tool0' in state[tempKey]:
-	                self.HotEndTemp = state[tempKey]['tool0']['actual']
-        	        self.HotEndTempTarget = state[tempKey]['tool0']['target']
+        if 'tool0' in state[tempKey]:
+            self.HotEndTemp = state[tempKey]['tool0']['actual']
+            self.HotEndTempTarget = state[tempKey]['tool0']['target']
 
-		if 'bed' in state[tempKey]:
-			self.BedTemp = state[tempKey]['bed']['actual']
-			self.BedTempTarget = state[tempKey]['bed']['target']
-		else:
-			self.BedTemp = -1;
-			self.BedTempTarget = -1;
+        if 'bed' in state[tempKey]:
+            self.BedTemp = state[tempKey]['bed']['actual']
+            self.BedTempTarget = state[tempKey]['bed']['target']
+        else:
+            self.BedTemp = -1;
+            self.BedTempTarget = -1;
 
                 if self.HotEndTempTarget == None:
                     self.HotEndTempTarget = 0.0
