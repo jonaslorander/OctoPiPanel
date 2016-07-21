@@ -15,11 +15,11 @@ import subprocess
 from pygame.locals import *
 from collections import deque
 from ConfigParser import RawConfigParser
- 
+
 class OctoPiPanel():
     """
     @var done: anything can set to True to forcequit
-    @var screen: points to: pygame.display.get_surface()        
+    @var screen: points to: pygame.display.get_surface()
     """
 
     # Read settings from OctoPiPanel.cfg settings file
@@ -93,14 +93,17 @@ class OctoPiPanel():
 
         #print self.HotEndTempList
         #print self.BedTempList
-       
+
         if platform.system() == 'Linux':
-			if subprocess.Popen(["pidof", "X"], stdout=subprocess.PIPE).communicate()[0].strip() == "" :
-				# Init framebuffer/touchscreen environment variables
-				os.putenv('SDL_VIDEODRIVER', 'fbcon')
-				os.putenv('SDL_FBDEV'      , '/dev/fb1')
-				os.putenv('SDL_MOUSEDRV'   , 'TSLIB')
-				os.putenv('SDL_MOUSEDEV'   , '/dev/input/touchscreen')
+            if subprocess.Popen(["pidof", "X"], stdout=subprocess.PIPE).communicate()[0].strip() == "" :
+                # Init framebuffer/touchscreen environment variables
+                os.putenv('SDL_VIDEODRIVER', 'fbcon')
+                os.putenv('SDL_FBDEV'      , '/dev/fb1')
+                # If this is not a RoboPeak USB display
+                lsusb = subprocess.Popen('lsusb', stdout=subprocess.PIPE).communicate()[0]
+                if lsusb.find('fccf:a001') == -1 :
+                    os.putenv('SDL_MOUSEDRV', 'TSLIB')
+                    os.putenv('SDL_MOUSEDEV', '/dev/input/touchscreen')
 
         # init pygame and set up screen
         pygame.init()
@@ -110,8 +113,8 @@ class OctoPiPanel():
             pygame.mouse.set_visible(False)
 
         self.screen = pygame.display.set_mode( (self.win_width, self.win_height) )
-	#modes = pygame.display.list_modes(16)
-	#self.screen = pygame.display.set_mode(modes[0], FULLSCREEN, 16)
+        #modes = pygame.display.list_modes(16)
+        #self.screen = pygame.display.set_mode(modes[0], FULLSCREEN, 16)
         pygame.display.set_caption( caption )
 
         # Set font
@@ -126,24 +129,24 @@ class OctoPiPanel():
         self.bglight_on = True
 
         # Home X/Y/Z buttons
-        self.btnHomeXY        = pygbutton.PygButton((  self.leftPadding,   5, self.buttonWidth, self.buttonHeight), "Home X/Y") 
-        self.btnHomeZ         = pygbutton.PygButton((  self.leftPadding,  35, self.buttonWidth, self.buttonHeight), "Home Z") 
-        self.btnZUp           = pygbutton.PygButton((  self.leftPadding + self.buttonWidth + self.buttonSpace,  35, self.buttonWidth, self.buttonHeight), "Z +25") 
+        self.btnHomeXY        = pygbutton.PygButton((  self.leftPadding,   5, self.buttonWidth, self.buttonHeight), "Home X/Y")
+        self.btnHomeZ         = pygbutton.PygButton((  self.leftPadding,  35, self.buttonWidth, self.buttonHeight), "Home Z")
+        self.btnZUp           = pygbutton.PygButton((  self.leftPadding + self.buttonWidth + self.buttonSpace,  35, self.buttonWidth, self.buttonHeight), "Z +25")
 
         # Heat buttons
-        self.btnHeatBed       = pygbutton.PygButton((  self.leftPadding,  65, self.buttonWidth, self.buttonHeight), "Heat bed") 
-        self.btnHeatHotEnd    = pygbutton.PygButton((  self.leftPadding,  95, self.buttonWidth, self.buttonHeight), "Heat hot end") 
+        self.btnHeatBed       = pygbutton.PygButton((  self.leftPadding,  65, self.buttonWidth, self.buttonHeight), "Heat bed")
+        self.btnHeatHotEnd    = pygbutton.PygButton((  self.leftPadding,  95, self.buttonWidth, self.buttonHeight), "Heat hot end")
 
         # Start, stop and pause buttons
-        self.btnStartPrint    = pygbutton.PygButton((  self.leftPadding + self.buttonWidth + self.buttonSpace,   5, self.buttonWidth, self.buttonHeight), "Start print") 
-        self.btnAbortPrint    = pygbutton.PygButton((  self.leftPadding + self.buttonWidth + self.buttonSpace,   5, self.buttonWidth, self.buttonHeight), "Abort print", (200, 0, 0)) 
-        self.btnPausePrint    = pygbutton.PygButton((  self.leftPadding + self.buttonWidth + self.buttonSpace,  35, self.buttonWidth, self.buttonHeight), "Pause print") 
+        self.btnStartPrint    = pygbutton.PygButton((  self.leftPadding + self.buttonWidth + self.buttonSpace,   5, self.buttonWidth, self.buttonHeight), "Start print")
+        self.btnAbortPrint    = pygbutton.PygButton((  self.leftPadding + self.buttonWidth + self.buttonSpace,   5, self.buttonWidth, self.buttonHeight), "Abort print", (200, 0, 0))
+        self.btnPausePrint    = pygbutton.PygButton((  self.leftPadding + self.buttonWidth + self.buttonSpace,  35, self.buttonWidth, self.buttonHeight), "Pause print")
 
         # Shutdown and reboot buttons
         self.btnReboot        = pygbutton.PygButton((  self.leftPadding + self.buttonWidth * 2 + self.buttonSpace * 2,   5, self.buttonWidth, self.buttonHeight), "Reboot");
         self.btnShutdown      = pygbutton.PygButton((  self.leftPadding + self.buttonWidth * 2 + self.buttonSpace * 2,  35, self.buttonWidth, self.buttonHeight), "Shutdown");
 
-        # I couldnt seem to get at pin 252 for the backlight using the usual method, 
+        # I couldnt seem to get at pin 252 for the backlight using the usual method,
         # but this seems to work
         if platform.system() == 'Linux':
             os.system("echo 252 > /sys/class/gpio/export")
@@ -158,12 +161,12 @@ class OctoPiPanel():
 
         # Init of class done
         print "OctoPiPanel initiated"
-   
+
     def Start(self):
         # OctoPiPanel started
         print "OctoPiPanel started!"
         print "---"
-        
+
         """ game loop: input, move, render"""
         while not self.done:
             # Handle events
@@ -183,37 +186,37 @@ class OctoPiPanel():
                     os.system("echo '1' > /sys/class/rpi-pwm/pwm0/duty")
                     self.bglight_ticks = pygame.time.get_ticks()
                     self.bglight_on = False
-            
+
             # Update buttons visibility, text, graphs etc
             self.update()
 
             # Draw everything
             self.draw()
-            
+
         """ Clean up """
         # enable the backlight before quiting
         if platform.system() == 'Linux':
             os.system("echo '1' > /sys/class/gpio/gpio252/value")
             os.system("echo '1' > /sys/class/gpio/gpio508/value")
             os.system("echo '90' > /sys/class/rpi-pwm/pwm0/duty")
-            
+
         # OctoPiPanel is going down.
         print "OctoPiPanel is going down."
 
         """ Quit """
         pygame.quit()
-       
+
     def handle_events(self):
         """handle all events."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 print "quit"
-		self.done = True
+                self.done = True
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     print "Got escape key"
-		    self.done = True
+                    self.done = True
 
                 # Look for specific keys.
                 #  Could be used if a keyboard is connected
@@ -252,7 +255,7 @@ class OctoPiPanel():
 
                 if 'click' in self.btnShutdown.handleEvent(event):
                     self._shutdown()
-            
+
             # Did the user click on the screen?
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # Reset backlight counter
@@ -275,27 +278,27 @@ class OctoPiPanel():
 
             if req.status_code == 200:
                 state = json.loads(req.text)
-        
+
                 # Set status flags
                 tempKey = 'temps' if 'temps' in state else 'temperature'
 
-		if 'tool0' in state[tempKey]:
-	                self.HotEndTemp = state[tempKey]['tool0']['actual']
-        	        self.HotEndTempTarget = state[tempKey]['tool0']['target']
+                if 'tool0' in state[tempKey]:
+                    self.HotEndTemp = state[tempKey]['tool0']['actual']
+                    self.HotEndTempTarget = state[tempKey]['tool0']['target']
 
-		if 'bed' in state[tempKey]:
-			self.BedTemp = state[tempKey]['bed']['actual']
-			self.BedTempTarget = state[tempKey]['bed']['target']
-		else:
-			self.BedTemp = -1;
-			self.BedTempTarget = -1;
+                if 'bed' in state[tempKey]:
+                    self.BedTemp = state[tempKey]['bed']['actual']
+                    self.BedTempTarget = state[tempKey]['bed']['target']
+                else:
+                    self.BedTemp = -1;
+                    self.BedTempTarget = -1;
 
                 if self.HotEndTempTarget == None:
                     self.HotEndTempTarget = 0.0
 
                 if self.BedTempTarget == None:
                     self.BedTempTarget = 0.0
-        
+
                 if self.HotEndTempTarget > 0.0:
                     self.HotHotEnd = True
                 else:
@@ -309,7 +312,7 @@ class OctoPiPanel():
                 #print self.apiurl_status
             elif req.status_code == 401:
                 print "Error: {0}".format(req.text)
-                
+
             # Get info about current job
             req = requests.get(self.apiurl_job + self.addkey)
             if req.status_code == 200:
@@ -320,7 +323,7 @@ class OctoPiPanel():
                 connState = json.loads(req.text)
 
                 #print self.apiurl_job + self.addkey
-            
+
                 self.Completion = jobState['progress']['completion'] # In procent
                 self.PrintTimeLeft = jobState['progress']['printTimeLeft']
                 #self.Height = state['currentZ']
@@ -339,7 +342,7 @@ class OctoPiPanel():
                 self.Paused = connState['current']['state'] == "Paused"
                 self.Printing = connState['current']['state'] == "Printing"
 
-                
+
         except requests.exceptions.ConnectionError as e:
             print "Connection Error ({0}): {1}".format(e.errno, e.strerror)
 
@@ -364,7 +367,7 @@ class OctoPiPanel():
             self.btnPausePrint.caption = "Resume"
         else:
             self.btnPausePrint.caption = "Pause"
-        
+
         # Set abort, pause, reboot and shutdown buttons visibility
         self.btnHeatHotEnd.visible = not (self.Printing or self.Paused)
         self.btnHeatBed.visible = not (self.Printing or self.Paused)
@@ -376,14 +379,14 @@ class OctoPiPanel():
             self.btnHeatHotEnd.caption = "Turn off hot end"
         else:
             self.btnHeatHotEnd.caption = "Heat hot end"
-        
+
         if self.HotBed:
             self.btnHeatBed.caption = "Turn off bed"
         else:
             self.btnHeatBed.caption = "Heat bed"
 
         return
-               
+
     def draw(self):
         #clear whole screen
         self.screen.fill( self.color_bg )
@@ -446,16 +449,16 @@ class OctoPiPanel():
         self.screen.blit(lbl0, (self.graph_area_left - 26, self.graph_area_top - 6 + (self.graph_area_height / 5) * 1))
         lbl0 = self.fntTextSmall.render("250", 1, (200, 200, 200))
         self.screen.blit(lbl0, (self.graph_area_left - 26, self.graph_area_top - 6 + (self.graph_area_height / 5) * 0))
- 
+
         # X-axis divisions, grey lines
         pygame.draw.line(self.screen, (200, 200, 200), [self.graph_area_left + 2, self.graph_area_top + (self.graph_area_height / 5) * 4], [self.graph_area_left + self.graph_area_width - 2, self.graph_area_top + (self.graph_area_height / 5) * 4], 1) # 50
         pygame.draw.line(self.screen, (200, 200, 200), [self.graph_area_left + 2, self.graph_area_top + (self.graph_area_height / 5) * 3], [self.graph_area_left + self.graph_area_width - 2, self.graph_area_top + (self.graph_area_height / 5) * 3], 1) # 100
         pygame.draw.line(self.screen, (200, 200, 200), [self.graph_area_left + 2, self.graph_area_top + (self.graph_area_height / 5) * 2], [self.graph_area_left + self.graph_area_width - 2, self.graph_area_top + (self.graph_area_height / 5) * 2], 1) # 150
         pygame.draw.line(self.screen, (200, 200, 200), [self.graph_area_left + 2, self.graph_area_top + (self.graph_area_height / 5) * 1], [self.graph_area_left + self.graph_area_width - 2, self.graph_area_top + (self.graph_area_height / 5) * 1], 1) # 200
-        
+
         # Y, time, 2 seconds per pixel
         pygame.draw.line(self.screen, (0, 0, 0), [self.graph_area_left, self.graph_area_top + self.graph_area_height], [self.graph_area_left + self.graph_area_width, self.graph_area_top + self.graph_area_height], 2)
-        
+
         # Scaling factor
         g_scale = self.graph_area_height / 250.0
 
@@ -476,12 +479,12 @@ class OctoPiPanel():
             i += 1
 
         # Draw target temperatures
-        # Hot end 
+        # Hot end
         pygame.draw.line(self.screen, (180, 40, 40), [self.graph_area_left, self.graph_area_top + self.graph_area_height - (self.HotEndTempTarget * g_scale)], [self.graph_area_left + self.graph_area_width, self.graph_area_top + self.graph_area_height - (self.HotEndTempTarget * g_scale)], 1);
         # Bed
         pygame.draw.line(self.screen, (40, 40, 180), [self.graph_area_left, self.graph_area_top + self.graph_area_height - (self.BedTempTarget * g_scale)], [self.graph_area_left + self.graph_area_width, self.graph_area_top + self.graph_area_height - (self.BedTempTarget * g_scale)], 1);
-            
-        
+
+
         # update screen
         pygame.display.update()
 
@@ -570,7 +573,7 @@ class OctoPiPanel():
 
         self.done = True
         print "reboot"
-        
+
         return
 
     # Shutdown system
