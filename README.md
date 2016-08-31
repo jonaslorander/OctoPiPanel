@@ -1,8 +1,12 @@
+# Important notice: #
+(2016-08-31) OctoPiPanel is not actively being developed due to little or no time to develop it.
+I will respond to issues and PR when I have the time. If anyone want's to be an actve member of the project, let me know so by email (jonas@lorander.com).
+
 ## OctoPiPanel v0.2-dev ##
 
 OctoPiPanel creates a simple interface on a small screen to control OctoPrint. <br/>
 OctoPiPanel requires Pygame to be installed. Pygame can be downloaded from http://pygame.org. <br/>
-OctoPiPanel is developed by Jonas Lorander (jonas@haksberg.net).<br/>
+OctoPiPanel is developed by Jonas Lorander (jonas@lorander.com).<br/>
 
 https://github.com/jonaslorander/OctoPiPanel
 
