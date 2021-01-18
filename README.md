@@ -1,6 +1,5 @@
 # Important notice: #
-(2016-08-31) OctoPiPanel is not actively being developed due to little or no time to develop it.
-I will respond to issues and PR when I have the time. If anyone want's to be an actve member of the project, let me know so by email (jonas@lorander.com).
+(2021-01-18) As of today, this project is permantenly archived.
 
 ## OctoPiPanel v0.2-dev ##
 
